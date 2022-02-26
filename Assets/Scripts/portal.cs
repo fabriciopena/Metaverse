@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class portal : MonoBehaviour
 {
@@ -10,22 +11,9 @@ public class portal : MonoBehaviour
   {
       if (collision.gameObject.name == "Main Character")
       {
-          //debug.Log("Transform Main Character");
-          character.transform.Translate(0, 0, 1);
+        SceneManager.LoadScene("SampleScene");
+        Debug.Log("Transform Main Character");
       }
 
   }
-/*
-    //public gameObject maincharacter;
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-        //collision.transform.Translate(0.05f, 0f,0f);
-    }
-*/
 }
