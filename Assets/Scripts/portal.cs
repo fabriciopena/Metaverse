@@ -12,7 +12,6 @@ public class portal : MonoBehaviour
       if (collision.gameObject.name == "Main Character")
       {
         SceneManager.LoadScene("SampleScene");
-        Debug.Log("Transform Main Character");
       }
 
   }
