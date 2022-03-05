@@ -11,8 +11,11 @@ public class grabObjects : MonoBehaviour {
     [SerializeField]
     private Transform grabbedItemSlot;
 
+    [SerializeField]
+    private float grabDistance = 2f;
+
     private PickableObject pickedItem;
-    
+
     Vector3 rightHandPosition = new Vector3(0.02f, 0.2f, -0.5f);
     Vector3 leftHandPosition = new Vector3(-3.1f, 0.2f, -0.5f);
     Vector3 dropOffPosition = new Vector3(-1.5f, 0.5f, -0.5f);
@@ -29,17 +32,34 @@ public class grabObjects : MonoBehaviour {
                 RaycastHit hit;
                 // Uses rays from center of the screen to pick up the block
 
-                if (Physics.Raycast(ray, out hit, 1.5f)) {
+                if (Physics.Raycast(ray, out hit, grabDistance)) {
                     // Shot ray to find object to pick
-
+                    
                     var pickable = hit.transform.GetComponent<PickableObject>();
                     if (pickable) {
                         // If the hit object has a Pickable object component (inherited from parent GameObject), pick the item up
-                        PickItem(pickable);
+                    
+                        if (hit.transform.name.Trim() == "Pickupable Object") {
+                            var newBlockInstance = Instantiate(hit.transform);
+                            PickItem(newBlockInstance.GetComponent<PickableObject>());
+                            // Create a new instance of that item when grabbing a block from the "menu"
+                        } else {
+                            PickItem(pickable);
+                            // Don't create a new instance of the block and simply pick up the block.
+                        }
+                        
                     }
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.T) && pickedItem) {    
+            Destroy(pickedItem.gameObject);
+            pickedItem = null;
+            // Trashes the picked item by deleting it from the scene by pressing the T key.
+        }
+
+
     }
 
     private void PickItem(PickableObject item) {
