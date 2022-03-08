@@ -6,7 +6,7 @@ public class cameramovement : MonoBehaviour {
     public GameObject follow;
     float mainSpeed = 5.0f;
     float maxShift = 1000.0f;
-    float camSens = 0.25f;
+    float camSens = 0.9f;
     private Vector3 lastMouse = new Vector3(255, 255, 255);
     private float totalRun= 1.0f;
 
@@ -17,9 +17,10 @@ public class cameramovement : MonoBehaviour {
         transform.eulerAngles = lastMouse;
         lastMouse =  Input.mousePosition;
 
-        float f = 0.0f;
+        transform.position = new Vector3(GameObject.Find("Main Character").transform.position.x, GameObject.Find("Main Character").transform.position.y, GameObject.Find("Main Character").transform.position.z);
+
         Vector3 p = GetBaseInput();
-        if (p.sqrMagnitude > 0){ 
+        if (p.sqrMagnitude > 0){
           if (Input.GetKey (KeyCode.LeftShift)){
               totalRun += Time.deltaTime;
               p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
@@ -29,10 +30,6 @@ public class cameramovement : MonoBehaviour {
              totalRun = Mathf.Clamp(totalRun * 0.5f, 1f, 1000f);
              p = p * mainSpeed;
           }
-
-          p = p * Time.deltaTime;
-          Vector3 newPosition = transform.position;
-          transform.Translate(p);
         }
     }
 
