@@ -21,6 +21,9 @@ public class grabObjects : MonoBehaviour {
 
     Color previousItemColor = Color.clear;
     MeshRenderer highlightedItem = new MeshRenderer();
+    string highlightName = "";
+    string highlightLayerName = "";
+    bool highlightOn = false;
     Color highlightColor = Color.clear;
 
     void Update() {
@@ -32,16 +35,21 @@ public class grabObjects : MonoBehaviour {
             // Drops an item when an instance of the picked item has already been initialized
             DropItem(pickedItem);
         }
-        else if (Physics.Raycast(ray, out hit, grabDistance)) {
-            // Shot ray to find object to pick
+        else if (Physics.Raycast(ray, out hit, grabDistance) && !pickedItem) {
+            // Shot ray to find object to pick when not holding an object already
             highlightedItem = hit.transform.GetChild(0).GetComponent<MeshRenderer>();
             // Mesh Renderer used to set the highlight color of the targeted object in range
-
-            if (previousItemColor.r == 0) {
+            
+            if (previousItemColor.r == 0 || (highlightName == hit.transform.GetChild(0).name && hit.transform.name.Trim() == highlightLayerName) && !highlightOn) {
                 previousItemColor = highlightedItem.material.color;
+                highlightOn = true;
             }
-            highlightedItem.material.SetColor("_Color", highlightColor);
             // Stores the previous color once to prevent accidentally setting it to the highlight color
+
+            highlightedItem.material.SetColor("_Color", highlightColor);
+            highlightName = hit.transform.GetChild(0).name;
+            highlightLayerName = hit.transform.name.Trim();
+            // Stores name of the object and its outer layer for highlight color comparison
 
             var pickable = hit.transform.GetComponent<PickableObject>();
             if (Input.GetMouseButtonDown(0) && pickable) {
@@ -64,14 +72,12 @@ public class grabObjects : MonoBehaviour {
                     // Don't create a new instance of the block and simply pick up the block.
                 }
             }
-            // BUGS: Some picked up instances still have their highlighted color
         } 
         else if (highlightedItem != null){
             highlightedItem.material.SetColor("_Color", previousItemColor);
             highlightedItem = new MeshRenderer();
-            // BUG: Hovering over both of the blocks from the menu sets the blocks to the same color
-            // One solution is to use previousItemColor = Color.clear; but using that causes some instances of the picked item to remain its highlight color
-            
+            highlightOn = false;
+            previousItemColor = highlightColor;
             // Clears highlighted color and previous color instance when not hovering over a block
         }
                     
@@ -107,14 +113,18 @@ public class grabObjects : MonoBehaviour {
         
         pickedObject.GetComponent<MeshRenderer>().material.SetColor("_Color", previousItemColor);
                     
-        previousItemColor = Color.clear;
-        // Removes instance of previous color
+        
     }
 
     private void DropItem(PickableObject item) {
         pickedItem = null;
         item.transform.SetParent(null);
         // Remove parent
+
+        item.transform.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", previousItemColor);
+        
+        previousItemColor = Color.clear;
+        // Removes instance of previous color
 
         item.objectRigidBody.isKinematic = false;
         // Enable rigidbody
