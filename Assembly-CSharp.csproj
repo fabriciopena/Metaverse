@@ -36,9 +36,10 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\moveCamera.cs" />
-     <Compile Include="Assets\grabObjects.cs" />
-     <Compile Include="Assets\PickableObject.cs" />
+     <Compile Include="Assets\Scripts\grabObjects.cs" />
+     <Compile Include="Assets\Scripts\moveCamera.cs" />
+     <Compile Include="Assets\Scripts\PickableObject.cs" />
+     <Compile Include="Assets\Scripts\blockMenu.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Unity 2020.3.23f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
