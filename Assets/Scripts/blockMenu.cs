@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class blockMenu : MonoBehaviour {
-    // Start is called before the first frame update
-    List<string> blockLists = new List<string>() {"Block List 1", "Block List 2"};
-    string visibleBlockList = "Block List 1";
+    int minBlockListIndex = 1;
+    int maxBlockListIndex = 4;
+    // NOTE: Only change these two indexes after creating new Block Menus
+
+    int counter = 0;
 
     [SerializeField]
     public Camera targetCamera;
@@ -20,38 +22,44 @@ public class blockMenu : MonoBehaviour {
             GameObject blockInstance = blockList.transform.GetChild(childCounter).gameObject;
             blockInstance.SetActive(blockStatus);
         }
-        // Grabs the parent block list Game Object to iterate through each child and sets the visibility of the block instances in the blockInstances1
+        // Grabs the parent block list Game Object to iterate through each child and sets the visibility of each block instance
     }
 
-    public void hideAllBlocks(string exemptedBlockList) {
-        foreach (string blockList in blockLists) {
-            if (exemptedBlockList != blockList) {
-                updateBlocksVisibility(blockList, false);
+    public void changeBlockMenu(int chosenMenuIndex) {
+        for (int blockIndex = minBlockListIndex; blockIndex <= maxBlockListIndex; blockIndex ++) {
+            if (blockIndex != chosenMenuIndex) {
+                string blockListInstanceName = "Block List " + blockIndex;
+                updateBlocksVisibility(blockListInstanceName, false);
             }
-            // Exclude the starting initial block list from being hidden
         }
-        // Initializes the other block lists as hidden based on the parent Game Object names in the blockLists List
+        // Hides the other block lists based on the parent Game Object combined with the iterated index
+        
+        updateBlocksVisibility("Block List " + chosenMenuIndex, true);
+        // Excluded the passed menu index to be shown, not hidden like the other block menus
     }
 
     void Start() { 
-        hideAllBlocks(visibleBlockList);
+        changeBlockMenu(minBlockListIndex);
     }
 
     void Update() {
         var ray = targetCamera.ViewportPointToRay(Vector3.one * 0.5f);
-        
         RaycastHit hit;
+        
         if (Physics.Raycast(ray, out hit, grabDistance) && Input.GetMouseButtonDown(0)) {
             if (hit.transform.name.Trim() == "Scroll Up") {
                 // Handles scrolling up the block menu
-                updateBlocksVisibility("Block List 1", true);
-                hideAllBlocks("Block List 1");
+                if (counter < maxBlockListIndex) {
+                    counter ++;
+                }
+                changeBlockMenu(counter);
 
             } else if (hit.transform.name.Trim() == "Scroll Down") {
                 // Handles scrolling down the block menu
-                updateBlocksVisibility("Block List 2", true);
-                hideAllBlocks("Block List 2");
-
+                if (counter > minBlockListIndex) {
+                    counter --;
+                }
+                changeBlockMenu(counter);
             }
         }
     }                
