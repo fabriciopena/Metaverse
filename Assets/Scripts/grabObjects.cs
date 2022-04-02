@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class grabObjects : MonoBehaviour {
-    // Crosshairs: https://forum.unity.com/threads/free-mega-crosshairs-pack.1071167/
-    [SerializeField]
-    public Camera mainCamera;
-    
+    // Crosshairs: https://forum.unity.com/threads/free-mega-crosshairs-pack.1071167/    
     [SerializeField]
     private Transform grabbedItemSlot;
 
-    [SerializeField]
-    public float grabDistance;
-
-    private PickableObject pickedItem;
+    public PickableObject pickedItem;
 
     Vector3 rightHandPosition = new Vector3(0.02f, 0.2f, -0.5f);
     Vector3 leftHandPosition = new Vector3(-3.1f, 0.2f, -0.5f);
@@ -26,56 +20,54 @@ public class grabObjects : MonoBehaviour {
     bool highlightOn = false;
     Color highlightColor = Color.clear;
 
-    void Update() {
-        var ray = mainCamera.ViewportPointToRay(Vector3.one * 0.5f);
-        RaycastHit hit;
-        // Uses rays from center of the screen to pick up the block
+    public void grabObjectsEvent(Transform hitObject) {
+        // Event used for block grabbing
 
+        var pickable = hitObject.GetComponent<PickableObject>();
+        if (!pickable) return;
+
+        highlightedItem = hitObject.GetChild(0).GetComponent<MeshRenderer>();
+        // Mesh Renderer used to set the highlight color of the targeted object in range
+            
+        if (previousItemColor.r == 0 || (highlightName == hitObject.GetChild(0).name && hitObject.name.Trim() == highlightLayerName) && !highlightOn) {
+            previousItemColor = highlightedItem.material.color;
+            highlightOn = true;
+        }
+        // Stores the previous color once to prevent accidentally setting it to the highlight color
+        // Checks if the object being hovered overed on is the same object that previously had a highlight based on the actual object name and outer layer enabling pickup.
+
+        highlightedItem.material.SetColor("_Color", highlightColor);
+        highlightName = hitObject.GetChild(0).name;
+        highlightLayerName = hitObject.name.Trim();
+        // Stores name of the object and its outer layer for highlight color comparison
+
+        if (Input.GetMouseButtonDown(0)) {
+            // If the hit object has a Pickable object from parent GameObject, pick the item up
+                
+            highlightedItem.material.SetColor("_Color", previousItemColor);
+            highlightedItem = new MeshRenderer();
+            // Remove highlight color and highlight item instance
+
+            if (hitObject.name.Trim() == "Pickupable Object") {
+                Transform grabbedBlock = hitObject;
+                grabbedBlock.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", previousItemColor);
+                // Removes the highlight color again since removing it only once outside of this if statement doesn't work
+
+                var newBlockInstance = Instantiate(grabbedBlock);
+                PickItem(newBlockInstance.GetComponent<PickableObject>());
+                // Create a new instance of that item when grabbing a block from the "menu"
+            } else {
+                PickItem(pickable);
+                // Don't create a new instance of the block and simply pick up the block.
+            }
+        }
+    }
+
+    void FixedUpdate() {
         if (pickedItem && Input.GetMouseButtonDown(0)) {
             // Drops an item when an instance of the picked item has already been initialized
             DropItem(pickedItem);
         }
-        else if (Physics.Raycast(ray, out hit, grabDistance) && !pickedItem) {
-            // Shot ray to find object to pick when not holding an object already
-            var pickable = hit.transform.GetComponent<PickableObject>();
-            if (!pickable) return;
-
-            highlightedItem = hit.transform.GetChild(0).GetComponent<MeshRenderer>();
-            // Mesh Renderer used to set the highlight color of the targeted object in range
-            
-            if (previousItemColor.r == 0 || (highlightName == hit.transform.GetChild(0).name && hit.transform.name.Trim() == highlightLayerName) && !highlightOn) {
-                previousItemColor = highlightedItem.material.color;
-                highlightOn = true;
-            }
-            // Stores the previous color once to prevent accidentally setting it to the highlight color
-            // Checks if the object being hovered overed on is the same object that previously had a highlight based on the actual object name and outer layer enabling pickup.
-
-            highlightedItem.material.SetColor("_Color", highlightColor);
-            highlightName = hit.transform.GetChild(0).name;
-            highlightLayerName = hit.transform.name.Trim();
-            // Stores name of the object and its outer layer for highlight color comparison
-
-            if (Input.GetMouseButtonDown(0)) {
-                // If the hit object has a Pickable object from parent GameObject, pick the item up
-                
-                highlightedItem.material.SetColor("_Color", previousItemColor);
-                highlightedItem = new MeshRenderer();
-                // Remove highlight color and highlight item instance
-
-                if (hit.transform.name.Trim() == "Pickupable Object") {
-                    Transform grabbedBlock = hit.transform;
-                    grabbedBlock.GetChild(0).GetComponent<MeshRenderer>().material.SetColor("_Color", previousItemColor);
-                    // Removes the highlight color again since removing it only once outside of this if statement doesn't work
-
-                    var newBlockInstance = Instantiate(grabbedBlock);
-                    PickItem(newBlockInstance.GetComponent<PickableObject>());
-                    // Create a new instance of that item when grabbing a block from the "menu"
-                } else {
-                    PickItem(pickable);
-                    // Don't create a new instance of the block and simply pick up the block.
-                }
-            }
-        } 
         else if (highlightedItem != null && highlightOn){
             highlightedItem.material.SetColor("_Color", previousItemColor);
             highlightedItem = new MeshRenderer();

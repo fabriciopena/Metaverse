@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class blockMenu : MonoBehaviour {
-    int minBlockListIndex = 1;
-    int maxBlockListIndex = 4;
+    public int minBlockListIndex = 1;
+    public int maxBlockListIndex = 4;
     // NOTE: Only change these two indexes after creating new Block Menus
 
-    int counter = 0;
-
-    [SerializeField]
-    public Camera targetCamera;
-
-    [SerializeField]
-    public float grabDistance;
+    public int blockSelectorIndex = 0;
 
     public void updateBlocksVisibility(string blockListName, bool blockStatus) {
         GameObject blockList = GameObject.Find(blockListName);
@@ -40,27 +34,5 @@ public class blockMenu : MonoBehaviour {
 
     void Start() { 
         changeBlockMenu(minBlockListIndex);
-    }
-
-    void Update() {
-        var ray = targetCamera.ViewportPointToRay(Vector3.one * 0.5f);
-        RaycastHit hit;
-        
-        if (Physics.Raycast(ray, out hit, grabDistance) && Input.GetMouseButtonDown(0)) {
-            if (hit.transform.name.Trim() == "Scroll Up") {
-                // Handles scrolling up the block menu
-                if (counter < maxBlockListIndex) {
-                    counter ++;
-                }
-                changeBlockMenu(counter);
-
-            } else if (hit.transform.name.Trim() == "Scroll Down") {
-                // Handles scrolling down the block menu
-                if (counter > minBlockListIndex) {
-                    counter --;
-                }
-                changeBlockMenu(counter);
-            }
-        }
-    }                
+    }             
 }
