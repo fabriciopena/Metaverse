@@ -9,7 +9,7 @@ public class blockMenu : MonoBehaviour {
 
     public int blockSelectorIndex = 0;
 
-    public void updateBlocksVisibility(string blockListName, bool blockStatus) {
+    void updateBlocksVisibility(string blockListName, bool blockStatus) {
         GameObject blockList = GameObject.Find(blockListName);
         
         for (int childCounter = 0; childCounter < blockList.transform.childCount; childCounter ++) {

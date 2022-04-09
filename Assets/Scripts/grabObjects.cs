@@ -20,6 +20,11 @@ public class grabObjects : MonoBehaviour {
     bool highlightOn = false;
     Color highlightColor = Color.clear;
 
+    public void resetBlockGrab() {
+        pickedItem = null;
+        previousItemColor = highlightColor;
+    }
+
     public void grabObjectsEvent(Transform hitObject) {
         // Event used for block grabbing
 
@@ -78,7 +83,7 @@ public class grabObjects : MonoBehaviour {
                     
         if (Input.GetKeyDown(KeyCode.T) && pickedItem) {    
             Destroy(pickedItem.gameObject);
-            pickedItem = null;
+            resetBlockGrab();
             // Trashes the picked item by deleting it from the scene by pressing the T key.
         }
     }
@@ -118,8 +123,18 @@ public class grabObjects : MonoBehaviour {
         item.objectRigidBody.isKinematic = false;
         // Enable rigidbody
         
-        item.transform.GetChild(0).localPosition = dropOffPosition;
-        // Sets the picked up object to the center of the camera once dropped 
+        // Debug.Log(item.transform.GetChild(0));
+        if (item.transform.childCount > 1) {
+            for (int childCounter = 0; childCounter < item.transform.childCount; childCounter ++) {
+                Debug.Log("deez nuts");
+                Transform blockInstance = item.transform.GetChild(childCounter);
+                blockInstance.localPosition = dropOffPosition;
+            }
+            // Error: Doesn't work yet for some odd reason
+        } else {
+            item.transform.GetChild(0).localPosition = dropOffPosition;
+        }
+        // Sets the picked up object to the center of the camera once dropped         
 
         if (item.objectRigidBody.useGravity) {
             item.objectRigidBody.AddForce(item.transform.forward * 0.5f, ForceMode.VelocityChange);
