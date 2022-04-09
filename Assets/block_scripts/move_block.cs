@@ -18,7 +18,7 @@ public class move_block : MonoBehaviour {
     void OnMouseDown() // temporarily will be using a click but control method will be found in the future
     {
         // this object was clicked - do something
-        GameObject.Find("move_controller").GetComponent<move_character>().teleport = true;
+        GameObject.Find("move_controller").GetComponent<move_character>().positionUpdate = true;
         Vector3 movement_vector = GameObject.Find("move_controller").GetComponent<move_character>().moveVector = move;
     }
 }

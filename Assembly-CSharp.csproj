@@ -54,11 +54,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\openMenu.cs" />
+    <Compile Include="Assets\block_scripts\velocity_block.cs" />
     <Compile Include="Assets\character.cs" />
     <Compile Include="Assets\moveCamera.cs" />
     <Compile Include="Assets\block_scripts\move_character.cs" />
     <Compile Include="Assets\block_scripts\move_block.cs" />
-    <Compile Include="Assets\block_scripts\velocity_block.cs" />
+    <Compile Include="Assets\block_scripts\material_changer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

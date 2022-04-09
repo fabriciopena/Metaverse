@@ -20,7 +20,7 @@ public class velocity_block : MonoBehaviour
     void OnMouseDown() // temporarily will be using a click but control method will be found in the future
     {
         // this object was clicked - do something
-        GameObject.Find("move_controller").GetComponent<move_character>().moving = true;
+        GameObject.Find("move_controller").GetComponent<move_character>().velocityUpdate = true;
         GameObject.Find("move_controller").GetComponent<move_character>().velocityVec = velocity;
         GameObject.Find("move_controller").GetComponent<move_character>().timer = time;
         
