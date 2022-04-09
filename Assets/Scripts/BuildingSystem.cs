@@ -7,10 +7,6 @@ public class BuildingSystem : MonoBehaviour
     public Transform shootingPoint;
     public GameObject blockObject;
     public Transform parent;
-    public Color normalColor;
-    public Color highlightedColor;
-
-    GameObject lastHightlightedBlock;
 
     public void Update()
     {
@@ -18,6 +14,7 @@ public class BuildingSystem : MonoBehaviour
         if (Input.GetButtonDown("UnlockMouse")){Cursor.lockState = CursorLockMode.None;}
         if (Input.GetMouseButtonDown(0)){BuildBlock(blockObject);}
         if (Input.GetMouseButtonDown(1)){DestroyBlock();}
+        HighlightBlock();
     }
 
     void BuildBlock(GameObject block)
@@ -33,26 +30,18 @@ public class BuildingSystem : MonoBehaviour
     {
         if (Physics.Raycast(shootingPoint.position, shootingPoint.forward, out RaycastHit hitInfo))
         {
-          Destroy(hitInfo.transform.gameObject);
-          Debug.Log("Physics.Raycast");
+          if(hitInfo.transform.gameObject.tag=="Blocks"){
+            Destroy(hitInfo.transform.gameObject);
+          }
         }
     }
     void HighlightBlock()
     {
       if (Physics.Raycast(shootingPoint.position, shootingPoint.forward, out RaycastHit hitInfo))
       {
-        if(lastHightlightedBlock == null)
-        {
-            lastHightlightedBlock = hitInfo.transform.gameObject;
-            hitInfo.transform.gameObject.GetComponent<Renderer>().material.color = highlightedColor;
-        }
-        else if (lastHightlightedBlock != hitInfo.transform.gameObject)
-        {
-            lastHightlightedBlock.GetComponent<Renderer>().material.color = normalColor;
-            hitInfo.transform.gameObject.GetComponent<Renderer>().material.color = highlightedColor;
-            lastHightlightedBlock = hitInfo.transform.gameObject;
+        if(hitInfo.transform.gameObject.tag=="Blocks"){
+
         }
       }
     }
-
 }
