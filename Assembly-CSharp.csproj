@@ -39,9 +39,13 @@
      <Compile Include="Assets\Scripts\playerClickEvents.cs" />
      <Compile Include="Assets\Scripts\grabObjects.cs" />
      <Compile Include="Assets\Scripts\moveCamera.cs" />
+     <Compile Include="Assets\Scripts\blockConnection.cs" />
      <Compile Include="Assets\Scripts\blockMenu.cs" />
      <Compile Include="Assets\Scripts\PickableObject.cs" />
-     <Compile Include="Assets\Scripts\blockConnection.cs" />
+     <Compile Include="Assets\Scripts\blockCodeCompile.cs" />
+     <Compile Include="Assets\Sample Block Scripts\printRandomNumber.cs" />
+     <Compile Include="Assets\Sample Block Scripts\printName.cs" />
+     <Compile Include="Assets\Sample Block Scripts\printFavoriteItem.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Unity 2020.3.23f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

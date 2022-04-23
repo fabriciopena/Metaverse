@@ -24,17 +24,12 @@ public class grabObjects : MonoBehaviour {
         pickedItem = null;
         previousItemColor = highlightColor;
     }
-
-    public void grabObjectsEvent(Transform hitObject) {
-        // Event used for block grabbing
-
-        var pickable = hitObject.GetComponent<PickableObject>();
-        if (!pickable) return;
-
-        highlightedItem = hitObject.GetChild(0).GetComponent<MeshRenderer>();
+    
+    public void objectHover(Transform hoveredObject) {
+        highlightedItem = hoveredObject.GetChild(0).GetComponent<MeshRenderer>();
         // Mesh Renderer used to set the highlight color of the targeted object in range
             
-        if (previousItemColor.r == 0 || (highlightName == hitObject.GetChild(0).name && hitObject.name.Trim() == highlightLayerName) && !highlightOn) {
+        if (previousItemColor.r == 0 || (highlightName == hoveredObject.GetChild(0).name && hoveredObject.name.Trim() == highlightLayerName) && !highlightOn) {
             previousItemColor = highlightedItem.material.color;
             highlightOn = true;
         }
@@ -42,11 +37,18 @@ public class grabObjects : MonoBehaviour {
         // Checks if the object being hovered overed on is the same object that previously had a highlight based on the actual object name and outer layer enabling pickup.
 
         highlightedItem.material.SetColor("_Color", highlightColor);
-        highlightName = hitObject.GetChild(0).name;
-        highlightLayerName = hitObject.name.Trim();
+        highlightName = hoveredObject.GetChild(0).name;
+        highlightLayerName = hoveredObject.name.Trim();
         // Stores name of the object and its outer layer for highlight color comparison
+    }
 
-        if (Input.GetMouseButtonDown(0)) {
+    public void grabObjectsEvent(Transform hitObject) {
+        // Event used for block grabbing
+        var pickable = hitObject.GetComponent<PickableObject>();
+        if (!pickable) return;
+
+        objectHover(hitObject);
+        if (Input.GetMouseButtonDown(0) && !pickedItem) {
             // If the hit object has a Pickable object from parent GameObject, pick the item up
                 
             highlightedItem.material.SetColor("_Color", previousItemColor);
@@ -97,7 +99,16 @@ public class grabObjects : MonoBehaviour {
         item.objectRigidBody.angularVelocity = Vector3.zero;
         // Disable rigidbody and reset velocities
         
-        item.transform.SetParent(grabbedItemSlot);
+        previousItemColor = Color.clear;
+        // Removes instance of previous color
+
+        if (item.transform.childCount > 1) {
+            Debug.Log("Do Stuff here");
+            // TODO: Change behavior to scale the child blocks accordingly when picking up a group of blocks
+        } else {
+            item.transform.SetParent(grabbedItemSlot);
+        }
+        
         // Uses parent slot to "grab" the object and make it a child of the empty GameObject. The GameObject must be a child of the main camera since attaching the picked-up item to the camera's Transform breaks the movement.
 
         item.transform.localPosition = Vector3.zero;
@@ -116,20 +127,17 @@ public class grabObjects : MonoBehaviour {
         pickedItem = null;
         item.transform.SetParent(null);
         // Remove parent
-        
-        previousItemColor = Color.clear;
-        // Removes instance of previous color
 
         item.objectRigidBody.isKinematic = false;
         // Enable rigidbody
         
-        // Debug.Log(item.transform.GetChild(0));
         if (item.transform.childCount > 1) {
-            for (int childCounter = 0; childCounter < item.transform.childCount; childCounter ++) {
-                Debug.Log("deez nuts");
-                Transform blockInstance = item.transform.GetChild(childCounter);
-                blockInstance.localPosition = dropOffPosition;
-            }
+            Debug.Log("Do Stuff Later");
+            // for (int childCounter = 0; childCounter < item.transform.childCount; childCounter ++) {
+            //     
+            //     Transform blockInstance = item.transform.GetChild(childCounter);
+            //     blockInstance.localPosition = dropOffPosition;
+            // }
             // Error: Doesn't work yet for some odd reason
         } else {
             item.transform.GetChild(0).localPosition = dropOffPosition;
