@@ -102,12 +102,21 @@ public class grabObjects : MonoBehaviour {
         previousItemColor = Color.clear;
         // Removes instance of previous color
 
-        if (item.transform.childCount > 1) {
-            Debug.Log("Do Stuff here");
-            // TODO: Change behavior to scale the child blocks accordingly when picking up a group of blocks
-        } else {
-            item.transform.SetParent(grabbedItemSlot);
-        }
+        item.transform.SetParent(grabbedItemSlot);
+        // if (item.transform.childCount > 1) {
+        //     // Schema of Placed blocks:
+        //     // Parent (Pickupable Block)
+        //         // Start Block Sphere
+        //         // Parent (Pickupable Block)
+        //             // Block 1
+        //         // Parent (Pickupable Block)
+        //             // Block 3
+
+        //     Debug.Log("Do Stuff here");
+        //     // TODO: Change behavior to scale the child blocks accordingly when picking up a group of blocks
+        // } else {
+        //     item.transform.SetParent(grabbedItemSlot);
+        // }
         
         // Uses parent slot to "grab" the object and make it a child of the empty GameObject. The GameObject must be a child of the main camera since attaching the picked-up item to the camera's Transform breaks the movement.
 

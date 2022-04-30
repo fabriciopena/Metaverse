@@ -77,6 +77,13 @@ public class playerClickEvents : MonoBehaviour {
                     // Run the blocks in order of connection
                 }
 
+                else if (!GrabObjects.pickedItem) {
+                    // Event for picking up blocks and enabling block hover
+                    GrabObjects.grabObjectsEvent(detectedObject);
+                }
+                // Has to put if statement in here to pick up whole block connection stack
+                
+
             } else if (!GrabObjects.pickedItem) {
                 // Event for picking up blocks and enabling block hover
                 GrabObjects.grabObjectsEvent(detectedObject);

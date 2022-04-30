@@ -15,5 +15,7 @@ public class blockConnection : MonoBehaviour {
         Quaternion newBlockRotation = newBlock.localRotation;
         newBlockRotation.eulerAngles = Vector3.zero;
         newBlock.localRotation = newBlockRotation;
+        // TODO: Figure out maximum y-value (maximum amount of blocks placed in one column)
+        // When column is full, begin at initial y-position and continue downwards
     }
 }
