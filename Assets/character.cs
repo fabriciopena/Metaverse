@@ -37,6 +37,14 @@ public class character : MonoBehaviour
         if (GameObject.Find("move_controller").GetComponent<move_character>().positionUpdate == true)
         {//teleport
             Vector3 movement = GameObject.Find("move_controller").GetComponent<move_character>().moveVector;
+            if (GameObject.Find("move_controller").GetComponent<move_character>().relativePosition)
+            
+            { //teleport relative to block
+                movement.x = movement.x + transform.position.x;
+                movement.y = movement.y + transform.position.y;
+                movement.z = movement.z + transform.position.z;
+                GameObject.Find("move_controller").GetComponent<move_character>().relativePosition = false;
+            }
             transform.position = movement;
             GameObject.Find("move_controller").GetComponent<move_character>().positionUpdate = false;
         }

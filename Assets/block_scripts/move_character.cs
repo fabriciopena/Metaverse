@@ -5,6 +5,7 @@ using UnityEngine;
 public class move_character : MonoBehaviour
 {
     public bool positionUpdate = false;
+    public bool relativePosition = false;
     public bool velocityUpdate = false;
     public bool materialUpdate = false;
     public int materialIndex = 0;

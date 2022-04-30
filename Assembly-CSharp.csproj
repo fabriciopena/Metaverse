@@ -53,13 +53,14 @@
     <UnityVersion>2020.3.23f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\block_scripts\material_changer.cs" />
     <Compile Include="Assets\openMenu.cs" />
     <Compile Include="Assets\block_scripts\velocity_block.cs" />
     <Compile Include="Assets\character.cs" />
     <Compile Include="Assets\moveCamera.cs" />
     <Compile Include="Assets\block_scripts\move_character.cs" />
     <Compile Include="Assets\block_scripts\move_block.cs" />
-    <Compile Include="Assets\block_scripts\material_changer.cs" />
+    <Compile Include="Assets\block_scripts\move_relative_block.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
